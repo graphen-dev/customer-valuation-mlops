@@ -1,0 +1,104 @@
+
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "customer-value-analysis"
+version = "0.1.0"
+description = "End-to-end MLOps pipeline for customer value analysis and propensity to leave."
+readme = "README.md"
+requires-python = ">=3.11"
+license = {text = "MIT"}
+keywords = [
+    "customer analysis",
+    "probability-of-churn",
+    "polars",
+    "mlops",
+    "xgboost",
+    "feature-engineering",
+]
+authors = [
+    {name = "Western", email = "minichworks@gmail.com"},
+]
+dependencies = [
+    "polars[rtcompat]",          # Core data engine (Replaces Pandas)
+    "pyarrow>=15.0.0",       # Required for Parquet support in Polars
+    "numpy>=1.26.0",         # Required for numerical operations
+    "scikit-learn>=1.4.0",   # For splitting and metrics
+    "xgboost>=2.0.0",        # PD Modeling
+    "lightgbm>=4.3.0",       # PD Modeling
+    "category-encoders>=2.6.3", # For Target Encoding (Crucial for Factory/Region)
+    "optuna>=3.6.0",         # Hyperparameter optimization
+    "wandb>=0.16.0",         # Weights & Biases for experiment tracking
+    "shap>=0.45.0",          # Model explainability
+    "python-box>=7.0.0",     # For easy config management (v7+ for Py3.12)
+    "ensure>=1.0.0",         # For decorator validation
+    "PyYAML>=6.0.1",        # For configuration files
+    "matplotlib>=3.8.0",     # Visualization (for EDA)
+    "seaborn>=0.13.0",       # Visualization (for EDA)
+    "jupyter>=1.0.0",        # For notebook experimentation
+    "dvc>=2.0.0",
+    "mlflow>=3.10.1",
+    "ipykernel",
+    "plotly",
+    "featuretools",
+    "streamlit",
+    "catboost>=1.2.10",
+    "dagster",
+    "dagster-webserver",
+    "feast",
+    "feast[redis]",
+    "google-cloud-core",
+    "google-cloud-bigquery",
+    "google-cloud-bigquery-storage",
+]
+
+
+[tool.dagster]
+module_name = "definitions"
+
+[project.optional-dependencies]
+dev = [
+    "black>=24.0.0",         # Code formatting
+    "isort>=5.13.0",         # Import sorting
+    "flake8>=7.0.0",         # Linting
+    "mypy>=1.9.0",           # Type checking
+    "pytest>=8.0.0",         # Unit prediction
+    "pytest-cov>=4.1.0",     # Coverage reporting
+    "pre-commit>=3.6.0",     # Automate linting before commit
+]
+
+[project.urls]
+Homepage = "https://github.com/minich-code/credit-risk-profiler"
+"Bug Tracker" = "https://github.com/minich-code/credit-risk-profiler/issues"
+
+[tool.hatch.build]
+include = [
+    "src/**/*.py",
+    "etl/**/*.py",
+    "config/**/*.yaml",
+    "README.md",
+]
+exclude = [
+    "**/__pycache__",
+    "data/**",                # Never bundle raw or processed data
+    "notebooks/**",
+    "artifacts/**",
+    ".env*",
+    "logs/**",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src", "etl"]
+
+[tool.black]
+line-length = 88
+target-version = ["py312"]
+include = '\.pyi?$'
+
+[tool.isort]
+profile = "black"
+line_length = 88
+multi_line_output = 3
